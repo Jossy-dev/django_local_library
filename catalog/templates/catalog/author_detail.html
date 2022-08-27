@@ -1,0 +1,42 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+ <h2> NAME: {{author.first_name}} {{author.last_name}}</h2>
+
+<h3> Author's Details </h3>
+
+ {% if user.is_authenticated %}
+ {% if perms.catalog.can_mark_returned %}
+<a href=" {% url 'author-update' author.pk %}">Update</a>
+<a href=" {% url 'author-delete' author.pk %}">Delete</a>
+{% endif %}
+{% endif %}
+
+{% if  author.date_of_birth %}
+<p><strong>Birth Date:</strong> <a href="">{{ author.date_of_birth }}</a></p>
+{% else %}
+<p><strong>Birth Date:</strong>  Not Known</p>
+{% endif %}
+
+{% if author.date_of_death %}
+<p><strong>Death Date:</strong> {{ author.date_of_death }}</p>
+{% else %}
+<p><strong>Death Date:</strong>  Not Known</p>
+{% endif %}
+
+<hr>
+<div style="margin-left:20px;margin-top:20px">
+<h3> Books by  {{author.first_name}} {{author.last_name}} </h3>
+{% for author in author.book_set.all %}
+
+{% if author.title %}
+<a href="{{ author.get_absolute_url }}"> <h5> {{ author.title }} </h5> </a>
+<p><strong> Summary: </strong>{{ author.summary }} </p>
+{% else %}
+<h5> This author has no books </h5>
+{% endif %}
+{% endfor %}
+
+</div>
+
+{% endblock %}
