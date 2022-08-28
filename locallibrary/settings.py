@@ -31,7 +31,7 @@ DEBUG = False
 # export DJANGO_DEBUG=False
 
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1:8000','https://vast-beyond-08049.herokuapp.com/',]
+ALLOWED_HOSTS = ['*',]
 
 
 # Application definition
