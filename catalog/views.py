@@ -79,6 +79,19 @@ class AuthorListView(generic.ListView):
 class AuthorDetailView(generic.DetailView):
     model = Author;
 
+class GenreListView(generic.ListView):
+    model = Genre;
+    paginate_by = 5
+
+    context_object_name = 'genre_list';
+
+    queryset = Genre.objects.all();
+
+    template_name = 'templates/catalog/genre_list.html'
+
+class GenreDetailView(generic.DetailView):
+    model = Genre;
+
 
 class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
     """Generic class-based view listing books on loan to current user."""
@@ -171,3 +184,13 @@ class BookDelete(DeleteView):
     model = Book
     success_url = reverse_lazy('books')
     # template_name_suffix = 'Delete'
+
+class GenreCreate(CreateView):
+    model = Genre
+    fields = '__all__'
+    success_url = reverse_lazy('book-create')
+
+class LanguageCreate(CreateView):
+    model = Language
+    fields = '__all__'
+    success_url = reverse_lazy('book-create')

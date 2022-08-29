@@ -27,8 +27,8 @@
 <hr>
 <div style="margin-left:20px;margin-top:20px">
 <h3> Books by  {{author.first_name}} {{author.last_name}} </h3>
-{% for author in author.book_set.all %}
 
+{% for author in author.book_set.all %}
 {% if author.title %}
 <a href="{{ author.get_absolute_url }}"> <h5> {{ author.title }} </h5> </a>
 <p><strong> Summary: </strong>{{ author.summary }} </p>

@@ -10,6 +10,11 @@ urlpatterns = [
 ]
 
 urlpatterns += [
+    path('genres/', views.GenreListView.as_view(), name='genres'),
+    path('genre/<int:pk>', views.GenreDetailView.as_view(), name='genre-detail'),
+]
+
+urlpatterns += [
     path('book/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian'),
 ]
  
@@ -23,4 +28,9 @@ urlpatterns += [
     path('book/create/', views.BookCreate.as_view(), name='book-create'),
     path('book/<int:pk>/update/', views.BookUpdate.as_view(), name='book-update'),
     path('book/<int:pk>/delete/', views.BookDelete.as_view(), name='book-delete'),
+    path('book/create/addlanguage/', views.LanguageCreate.as_view(), name='language-create'),
+    path('book/create/addgenre/', views.GenreCreate.as_view(), name='genre-create'),
+    path('genres/', views.GenreListView.as_view(), name='genres'),
+    path('genre/<int:pk>', views.GenreDetailView.as_view(), name='genre-detail'),
 ]
+

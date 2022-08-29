@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1> {{ genre.name }} </h1>
+
+{% for genre in genre.book_set.all %}
+{% if genre.title %}
+<a href="{{ author.get_absolute_url }}"> <h5> {{ genre.title }} </h5> </a>
+<p><strong> Summary: </strong>{{ genre.summary }} </p>
+<hr>
+{% else %}
+<h5> This genre has no books </h5>
+{% endif %}
+{% endfor %}
+
+{% endblock %}

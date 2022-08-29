@@ -1,9 +1,6 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<a href="{% url 'genre-create' %}"> Add Genre </a>
-<br>
-<a href="{% url 'language-create' %}"> Add Language </a>
   <form action="" method="post">
     {% csrf_token %}
     <table>

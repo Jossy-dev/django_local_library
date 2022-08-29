@@ -13,6 +13,10 @@ class Genre(models.Model):
         """String for representing the Model object."""
         return self.name
 
+    def get_absolute_url(self):
+        """Returns the URL to access a particular author instance."""
+        return reverse('book-create', args=[str(self.id)])
+
 from django.urls import reverse # Used to generate URLs by reversing the URL patterns
 
 class Language(models.Model):
@@ -23,6 +27,10 @@ class Language(models.Model):
     def __str__(self):
         """String for representing the Model object (in Admin site etc.)"""
         return self.lang
+
+    def get_absolute_url(self):
+        """Returns the URL to access a particular author instance."""
+        return reverse('book-create', args=[str(self.id)])
 
 class Book(models.Model):
     """Model representing a book (but not a specific copy of a book)."""
