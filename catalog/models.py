@@ -15,7 +15,7 @@ class Genre(models.Model):
 
     def get_absolute_url(self):
         """Returns the URL to access a particular author instance."""
-        return reverse('book-create', args=[str(self.id)])
+        return reverse('genre-detail', args=[str(self.id)])
 
 from django.urls import reverse # Used to generate URLs by reversing the URL patterns
 
@@ -46,7 +46,7 @@ class Book(models.Model):
 
     # ManyToManyField used because genre can contain many books. Books can cover many genres.
     # Genre class has already been defined so we can specify the object above.
-    genre = models.ManyToManyField(Genre, help_text='Select a genre for this book')
+    genre = models.ForeignKey('Genre', on_delete=models.SET_NULL, null=True)
 
     language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
 
@@ -57,13 +57,6 @@ class Book(models.Model):
     def get_absolute_url(self):
         """Returns the URL to access a detail record for this book."""
         return reverse('book-detail', args=[str(self.id)])
-
-    def display_genre(self):
-        """Create a string for the Genre. This is required to display genre in Admin."""
-        return ', '.join(genre.name for genre in self.genre.all()[:3])
-
-    display_genre.short_description = 'Genre'
-
 
 import uuid # Required for unique book instances
 

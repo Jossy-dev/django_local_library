@@ -30,7 +30,4 @@ urlpatterns += [
     path('book/<int:pk>/delete/', views.BookDelete.as_view(), name='book-delete'),
     path('book/create/addlanguage/', views.LanguageCreate.as_view(), name='language-create'),
     path('book/create/addgenre/', views.GenreCreate.as_view(), name='genre-create'),
-    path('genres/', views.GenreListView.as_view(), name='genres'),
-    path('genre/<int:pk>', views.GenreDetailView.as_view(), name='genre-detail'),
 ]
-

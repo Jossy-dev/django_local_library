@@ -14,7 +14,6 @@
     {% for book in book_list %}
       <li>
         <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> -{{book.author}}
-        ({{book.genre.all|join:", "}})
       </li>
     {% endfor %}
   </ul>
@@ -37,5 +36,6 @@
                 {% endif %}
             </span>
         </div>
+
     {% endif %}
   {% endblock %}
