@@ -203,7 +203,6 @@ class SearchAllList(generic.ListView):
     model = Book
     paginate_by = 10 
     order_by = 'title'
-    # query = None
     def get_queryset(self):
         query = self.request.GET.get("q")
         if query is not None:
