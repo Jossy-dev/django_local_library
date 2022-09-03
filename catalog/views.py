@@ -82,7 +82,7 @@ class AuthorDetailView(generic.DetailView):
 class GenreListView(generic.ListView):
     model = Genre;
     paginate_by = 5
-
+    order_by = 'name'
     context_object_name = 'genre_list';
 
     queryset = Genre.objects.all();
@@ -194,3 +194,24 @@ class LanguageCreate(CreateView):
     model = Language
     fields = '__all__'
     success_url = reverse_lazy('book-create')
+
+from django.db.models import Q
+from itertools import chain
+# from catalog.forms import SearchForm
+
+class SearchAllList(generic.ListView):
+    model = Book
+    paginate_by = 10 
+    order_by = 'title'
+    # query = None
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        if query is not None:
+            book_results        = Book.objects.search(query)
+            author_results      = Author.objects.search(query)
+            genre_results       = Genre.objects.search(query)
+             
+        object_list = list(chain(book_results, author_results, genre_results))
+        return object_list
+
+    template_name = 'catalog/search_result_all.html'

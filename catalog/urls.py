@@ -31,3 +31,7 @@ urlpatterns += [
     path('book/create/addlanguage/', views.LanguageCreate.as_view(), name='language-create'),
     path('book/create/addgenre/', views.GenreCreate.as_view(), name='genre-create'),
 ]
+
+urlpatterns += [
+    path('searchall/', views.SearchAllList.as_view(), name='search_all_result'),
+]

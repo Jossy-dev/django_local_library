@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h1>Search Results for <b>"{{ request.GET.q }}"</b></h1>
+{% if request.GET.q != '' %}
+{% if object_list %}
+{% for book in object_list %}
+<ul>
+      <li>
+        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> -{{book.author}}
+      </li>
+  </ul>
+   {% endfor %}	
+   {% else %}
+   <p> No match found </p>
+   {% endif %}
+   {% else %}
+   <p> Field cannot be empty </p>
+   {% endif %}
+{% endblock %}
+
+{% block paginate%}
+{% endblock %}

@@ -1,5 +1,5 @@
 import datetime
-
+# from django import CharField
 from django import forms
 
 from django.core.exceptions import ValidationError
@@ -21,3 +21,14 @@ class RenewBookForm(forms.Form):
 
         # Remember to always return the cleaned data.
         return data
+
+# class SearchForm(forms.Form):
+#     search_value = forms.CharField(max_length = 100,label = '', label_suffix = '', help_text = 'Search...')
+
+#     def clean_search_value(self):
+#         data = self.cleaned_data['q']
+
+#         if not data:
+#             raise ValidationError(_('Field cannot be empty'))
+#         return data
+        
