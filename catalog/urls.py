@@ -17,7 +17,7 @@ urlpatterns += [
 urlpatterns += [
     path('book/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian'),
 ]
- 
+
 urlpatterns += [
     path('author/create/', views.AuthorCreate.as_view(), name='author-create'),
     path('author/<int:pk>/update/', views.AuthorUpdate.as_view(), name='author-update'),
@@ -33,5 +33,6 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('searchall/', views.SearchAllList.as_view(), name='search_all_result'),
+    path('search/', views.search, name='search_all_result'),
+    # path('searchall/', views.SearchAllList.as_view(), name='search_all_result'),
 ]
