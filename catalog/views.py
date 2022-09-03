@@ -6,9 +6,20 @@ from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
-# class MyView(LoginRequiredMixin, View):
-#     login_url = '/login/'
-#     redirect_field_name = 'redirect_to'
+import datetime
+
+from django.contrib.auth.decorators import login_required, permission_required
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect, HttpResponse
+from django.urls import reverse
+
+from catalog.forms import RenewBookForm
+
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+
+from catalog.models import Author
+from django.views import generic
 
 
 def index(request):
@@ -24,16 +35,15 @@ def index(request):
     # The 'all()' is implied by default.
     num_authors = Author.objects.count()
 
-    #Genre's that contain letter 'e'
-    genre_e  = Genre.objects.filter(name__icontains = 'e').count
+    # Genre's that contain letter 'e'
+    genre_e = Genre.objects.filter(name__icontains='e').count
 
-    #Book's that contain letter 'a'
-    book_a  = Book.objects.filter(title__icontains = 'a').count
+    # Book's that contain letter 'a'
+    book_a = Book.objects.filter(title__icontains='a').count
 
     # Number of visits to this view, as counted in the session variable.
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
-
 
     context = {
         'num_books': num_books,
@@ -48,16 +58,16 @@ def index(request):
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
 
-from django.views import generic
 
 class BookListView(generic.ListView):
     model = Book
 
-    context_object_name = 'book_list'   # your own name for the list as a template variable
-    
-    queryset = Book.objects.all() # List all books
-    
+    context_object_name = 'book_list'  # your own name for the list as a template variable
+
+    queryset = Book.objects.all()  # List all books
+
     template_name = 'templates/catalog/book_list.html'  # Specify your own template name/location
+
 
 # We can override objects when using class-based views
 #  def get_queryset(self):
@@ -66,18 +76,21 @@ class BookListView(generic.ListView):
 class BookDetailView(generic.DetailView):
     model = Book;
 
+
 class AuthorListView(generic.ListView):
-	model = Author;
-	paginate_by = 5
+    model = Author;
+    paginate_by = 5
 
-	context_object_name = 'author_list';
+    context_object_name = 'author_list';
 
-	queryset = Author.objects.all();
+    queryset = Author.objects.all();
 
-	template_name = 'templates/catalog/author_list.html'
+    template_name = 'templates/catalog/author_list.html'
+
 
 class AuthorDetailView(generic.DetailView):
     model = Author;
+
 
 class GenreListView(generic.ListView):
     model = Genre;
@@ -89,35 +102,30 @@ class GenreListView(generic.ListView):
 
     template_name = 'templates/catalog/genre_list.html'
 
+
 class GenreDetailView(generic.DetailView):
     model = Genre;
 
 
-class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
+class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
     """Generic class-based view listing books on loan to current user."""
     model = BookInstance
-    template_name ='catalog/bookinstance_list_borrowed_user.html'
+    template_name = 'catalog/bookinstance_list_borrowed_user.html'
     paginate_by = 5
 
     def get_queryset(self):
         return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
 
+
 class LibrarianBorrowedBooksListView(PermissionRequiredMixin, generic.ListView):
     permission_required = 'catalog.can_mark_returned'
     model = BookInstance
     context_object_name = 'librarian_list';
-    template_name ='catalog/librarian_books_borrowed_list.html'
+    template_name = 'catalog/librarian_books_borrowed_list.html'
+
     def get_queryset(self):
         return BookInstance.objects.filter(status__exact='o').order_by('due_back')
 
-import datetime
-
-from django.contrib.auth.decorators import login_required, permission_required
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-
-from catalog.forms import RenewBookForm
 
 @login_required
 @permission_required('catalog.can_mark_returned', raise_exception=True)
@@ -153,64 +161,91 @@ def renew_book_librarian(request, pk):
     return render(request, 'catalog/book_renew_librarian.html', context)
 
 
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-
-from catalog.models import Author
-
 class AuthorCreate(CreateView):
     model = Author
     fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
 
+
 class AuthorUpdate(UpdateView):
     model = Author
-    fields = '__all__' # Not recommended (potential security issue if more fields added)
+    fields = '__all__'  # Not recommended (potential security issue if more fields added)
+
 
 class AuthorDelete(DeleteView):
     model = Author
     success_url = reverse_lazy('authors')
 
+
 class BookCreate(CreateView):
     model = Book
-    fields = ['title', 'author', 'summary', 'isbn', 'genre', 'language' ]
+    fields = ['title', 'author', 'summary', 'isbn', 'genre', 'language']
     # template_name_suffix = 'New'
+
 
 class BookUpdate(UpdateView):
     model = Book
-    fields = '__all__' # Not recommended (potential security issue if more fields added)
+    fields = '__all__'  # Not recommended (potential security issue if more fields added)
     # template_name_suffix = 'Update'
+
 
 class BookDelete(DeleteView):
     model = Book
     success_url = reverse_lazy('books')
     # template_name_suffix = 'Delete'
 
+
 class GenreCreate(CreateView):
     model = Genre
     fields = '__all__'
     success_url = reverse_lazy('book-create')
+
 
 class LanguageCreate(CreateView):
     model = Language
     fields = '__all__'
     success_url = reverse_lazy('book-create')
 
-from django.db.models import Q
-from itertools import chain
-# from catalog.forms import SearchForm
 
-class SearchAllList(generic.ListView):
-    model = Book
-    paginate_by = 10 
-    order_by = 'title'
-    def get_queryset(self):
-        query = self.request.GET.get("q")
-        if query is not None:
-            book_results        = Book.objects.search(query)
-            author_results      = Author.objects.search(query)
-            genre_results       = Genre.objects.search(query)
-             
-        object_list = list(chain(book_results, author_results, genre_results))
-        return object_list
+# from django.db.models import Q
+# from itertools import chain
+#
+#
+# # from catalog.forms import SearchForm
+#
+# class SearchAllList(generic.ListView):
+#     model = Book
+#     paginate_by = 10
+#     order_by = 'title'
+#
+#     # query = None
+#     def get_queryset(self):
+#         query = self.request.GET.get("q")
+#         if query is not None:
+#             book_results = Book.objects.search(query)
+#             author_results = Author.objects.search(query)
+#             genre_results = Genre.objects.search(query)
+#
+#         object_list = list(chain(book_results, author_results, genre_results))
+#         return object_list
+#
+#     template_name = 'catalog/search_result_all.html'
 
-    template_name = 'catalog/search_result_all.html'
+
+
+def search(request):
+    search_term = request.GET.get('q', None)
+
+    if search_term:
+        author_f = list(Author.objects.filter(first_name__icontains=search_term))
+        author_l = list(Author.objects.filter(last_name__icontains=search_term))
+        book_t = list(Book.objects.filter(title__icontains=search_term))
+        genre_n = list(Genre.objects.filter(name__iexact=search_term))
+        found_entries = set(author_f) | set(author_l) | set(book_t) | set(genre_n)
+        final = found_entries
+
+        return render(request, 'catalog/search_result_all.html',
+                      {'query_string': search_term, 'found_entries': final},
+                      )
+
+    else:
+        return HttpResponse('Please enter a search term')
