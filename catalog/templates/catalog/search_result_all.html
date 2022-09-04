@@ -12,7 +12,7 @@
             </ul>
 
         {% else %}
-        <p> No entries found </p>
+        <p> No result found for:  <b>"{{ request.GET.q }}"</b></p>
         {% endif %}
 
 {% endblock %}
