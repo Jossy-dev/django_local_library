@@ -40,14 +40,7 @@
  </ul>
   {% endblock %}
       </div>
-      <!-- <div class="col-sm-10 ">
-      <form action="{% url 'search_all_result' %}" method="get">
-      {% csrf_token %}
-      <input name="search_value" type="text" placeholder="Search...">
-      <input type="submit" value="Submit">
-      </form> -->
-
-
+      <div class="col-sm-10 ">
        <form action="{% url 'search_all_result' %}" method="GET" value="{{request.GET.q}}">
        <input type="text" name="q" value="{{request.GET.q}}" placeholder="Search..."/>
        <input type="submit" name="submit" value="Search"/>

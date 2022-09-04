@@ -3,8 +3,6 @@
 {% block content %}
 
     <h1>Search Results for <b>"{{ request.GET.q }}"</b></h1>
-    {% if request.GET.q != '' %}
-
         {% if found_entries %}
 
             <ul>
@@ -17,11 +15,6 @@
 
         {% endif %}
 
-
-
-    {% else %}
-        <p> Field cannot be empty </p>
-    {% endif %}
 {% endblock %}
 
 
