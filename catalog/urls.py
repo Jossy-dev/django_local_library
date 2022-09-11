@@ -34,5 +34,4 @@ urlpatterns += [
 
 urlpatterns += [
     path('search/', views.search, name='search_all_result'),
-    # path('searchall/', views.SearchAllList.as_view(), name='search_all_result'),
 ]
