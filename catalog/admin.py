@@ -1,13 +1,10 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Author, Genre, Book, BookInstance, Language
-
+from .models import Author, Genre, Book, BookInstance, Language, Profile
 admin.site.register(Genre)
 admin.site.register(Language)
-# admin.site.register(Book)
-# admin.site.register(BookInstance)
-# admin.site.register(Author)
+admin.site.register(Profile)
 
 class BookInline(admin.TabularInline):
     model = Book

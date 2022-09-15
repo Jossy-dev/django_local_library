@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from datetime import date
 from django.urls import reverse  # Used to generate URLs by reversing the URL patterns
 import uuid  # Required for unique book instances
-
+from PIL import Image
 
 # Create your models here.
 
@@ -46,7 +46,6 @@ class Book(models.Model):
     isbn = models.CharField('ISBN', max_length=13, unique=True,
                             help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>')
 
-    # ManyToManyField used because genre can contain many books. Books can cover many genres.
     # Genre class has already been defined so we can specify the object above.
     genre = models.ForeignKey('Genre', on_delete=models.SET_NULL, null=True)
 
@@ -117,3 +116,24 @@ class Author(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.last_name} {self.first_name}'
+
+# Extending User Model Using a One-To-One Link
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(default='default.png', upload_to='profile_images')
+    bio = models.TextField()
+    favourite_genre = models.ForeignKey('Genre', on_delete=models.SET_NULL, null=True) 
+
+    def __str__(self):
+        return self.user.username
+
+    # resizing images
+    def save(self, *args, **kwargs):
+        super().save()
+
+        img = Image.open(self.avatar.path)
+
+        if img.height > 100 or img.width > 100:
+            new_img = (100, 100)
+            img.thumbnail(new_img)
+            img.save(self.avatar.path)

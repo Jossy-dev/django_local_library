@@ -35,3 +35,8 @@ urlpatterns += [
 urlpatterns += [
     path('search/', views.search, name='search_all_result'),
 ]
+
+urlpatterns += [
+    path('profile/', views.profile, name='users-profile'),
+    path('register/', views.register_request, name="register")
+]

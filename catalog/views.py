@@ -1,25 +1,27 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 from .models import Book, Author, BookInstance, Genre, Language
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib import messages
 
 import datetime
 
 from django.contrib.auth.decorators import login_required, permission_required
-from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 
-from catalog.forms import RenewBookForm
+from catalog.forms import RenewBookForm, UpdateUserForm, UpdateProfileForm, NewUserForm
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 from catalog.models import Author
 from django.views import generic
+
+from django.contrib.auth import login
 
 
 def index(request):
@@ -223,3 +225,33 @@ def search(request):
 
     else:
         return HttpResponse('Please enter a search term')
+
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        user_form = UpdateUserForm(request.POST, instance=request.user)
+        profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Your profile is updated successfully')
+            return redirect(to='users-profile')
+    else:
+        user_form = UpdateUserForm(instance=request.user)
+        profile_form = UpdateProfileForm(instance=request.user.profile)
+
+    return render(request, 'catalog/profile.html', {'user_form': user_form, 'profile_form': profile_form})
+
+def register_request(request):
+    if request.method == "POST":
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Registration successful." )
+            return redirect(to='users-profile')
+        messages.error(request, "Unsuccessful registration. Invalid information.")
+    form = NewUserForm()
+    return render (request=request, template_name="catalog/register.html", context={"register_form":form})
