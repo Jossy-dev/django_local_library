@@ -6,6 +6,7 @@ from django import forms
 import datetime
 from django.contrib.auth.forms import UserCreationForm
 
+
 class UpdateUserForm(forms.ModelForm):
     username = forms.CharField(max_length=100,
                                required=True,
@@ -26,6 +27,7 @@ class UpdateProfileForm(forms.ModelForm):
         model = Profile
         fields = ['avatar', 'bio']
 
+
 class RenewBookForm(forms.Form):
     renewal_date = forms.DateField(help_text="Enter a date between now and 4 weeks (default 3).")
 
@@ -42,6 +44,7 @@ class RenewBookForm(forms.Form):
 
         # Remember to always return the cleaned data.
         return data
+
 
 # class SearchForm(forms.Form):
 #     search_value = forms.CharField(max_length = 100,label = '', label_suffix = '', help_text = 'Search...')
@@ -74,12 +77,13 @@ class UpdateProfileForm(forms.ModelForm):
         model = Profile
         fields = ['avatar', 'bio']
 
+
 class NewUserForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
     class Meta:
         model = User
-        fields = ("username", "email", "password1", "password2")
+        fields = ("username", "email", "first_name", "last_name", "password1", "password2")
 
     def save(self, commit=True):
         user = super(NewUserForm, self).save(commit=False)
