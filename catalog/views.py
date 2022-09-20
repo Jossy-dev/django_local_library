@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
-from .models import Book, Author, BookInstance, Genre, Language
+from .models import Book, Author, BookInstance, Genre, Language, Profile
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -255,3 +255,16 @@ def register_request(request):
         messages.error(request, "Unsuccessful registration. Invalid information.")
     form = NewUserForm()
     return render (request=request, template_name="catalog/register.html", context={"register_form":form})
+
+class RecommendedListView(LoginRequiredMixin, generic.ListView):
+    model = Profile;
+    # paginate_by = 15
+    order_by = 'title'
+    context_object_name = 'recommended';
+
+    # queryset = Genre.objects.all();
+
+    template_name = 'catalog/recommended.html'
+
+    def get_queryset(self):
+        return Profile.objects.get(user=self.request.user)

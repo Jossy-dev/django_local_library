@@ -21,17 +21,17 @@
 {% if author.date_of_death %}
 <p><strong>Death Date:</strong> {{ author.date_of_death }}</p>
 {% else %}
-<p><strong>Death Date:</strong>  Not Known</p>
+<p><strong>Death Date:</strong> </p>
 {% endif %}
 
 <hr>
 <div style="margin-left:20px;margin-top:20px">
 <h3> Books by  {{author.first_name}} {{author.last_name}} </h3>
 
-{% for author in author.book_set.all %}
-{% if author.title %}
-<a href="{{ author.get_absolute_url }}"> <h5> {{ author.title }} </h5> </a>
-<p><strong> Summary: </strong>{{ author.summary }} </p>
+{% for books in author.book_set.all %}
+{% if books.title %}
+<a href="{{ books.get_absolute_url }}"> <h5> {{ books.title }} </h5> </a>
+<p><strong> Summary: </strong>{{ books.summary }} </p>
 {% else %}
 <h5> This author has no books </h5>
 {% endif %}

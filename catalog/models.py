@@ -127,7 +127,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(default='default.png', upload_to='profile_images')
     bio = models.TextField()
-    favourite_genre = models.ForeignKey('Genre', on_delete=models.SET_NULL, null=True)
+    favourite_genre = models.ManyToManyField(Genre, help_text='Select your favourite genres')
 
     def __str__(self):
         return self.user.username
@@ -150,3 +150,13 @@ def create_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
     else:
         print("User profile could not be created.")
+
+# class Recommended(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+#     favourite_genre = models.ManyToManyField(Genre, help_text='Select your favourite genres')
+#     def __str__(self):
+#         """String for representing the Model object."""
+#         return self.name
+#     def get_absolute_url(self):
+#         return reverse('author-detail', args=[str(self.id)])

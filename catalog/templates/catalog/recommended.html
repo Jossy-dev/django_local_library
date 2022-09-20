@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Recommended</h1>
+
+  {% for genres in recommended.favourite_genre.all %}
+  <a href="#">{{ genres }}</a>
+     {% for books in genres.book_set.all %}
+  <ul>
+     {% if books %}
+      <li>
+      <a href="#">{{ books.title }}</a>
+      </li>
+       {% else %}
+    <p>Select a favourite genre to see recommendations</p>
+    {% endfor %}
+  {% endif %}
+  </ul>
+  {% endfor %}
+    {% endfor %}
+{% endblock %}
+

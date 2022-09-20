@@ -26,6 +26,8 @@
 
    <li><a href="{% url 'my-borrowed' %}">My Borrowed</a></li>
    <li><a href="{% url 'users-profile' %}">Profile</a></li>
+   <li><a href="{% url 'recommended' %}">Recommended</a></li> 
+
 
    <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
    {% else %}

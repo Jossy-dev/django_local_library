@@ -38,5 +38,6 @@ urlpatterns += [
 
 urlpatterns += [
     path('profile/', views.profile, name='users-profile'),
-    path('register/', views.register_request, name="register")
+    path('register/', views.register_request, name="register"),
+    path('recommended/', views.RecommendedListView.as_view(), name='recommended'),
 ]

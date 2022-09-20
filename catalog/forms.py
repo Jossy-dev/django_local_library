@@ -5,6 +5,7 @@ from .models import Profile
 from django import forms
 import datetime
 from django.contrib.auth.forms import UserCreationForm
+from django.forms import ModelForm
 
 
 class UpdateUserForm(forms.ModelForm):
@@ -25,7 +26,7 @@ class UpdateProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['avatar', 'bio']
+        fields = ['avatar', 'bio', 'favourite_genre']
 
 
 class RenewBookForm(forms.Form):
@@ -57,27 +58,6 @@ class RenewBookForm(forms.Form):
 #         return data
 
 
-class UpdateUserForm(forms.ModelForm):
-    username = forms.CharField(max_length=100,
-                               required=True,
-                               widget=forms.TextInput(attrs={'class': 'form-control'}))
-    email = forms.EmailField(required=True,
-                             widget=forms.TextInput(attrs={'class': 'form-control'}))
-
-    class Meta:
-        model = User
-        fields = ['username', 'email']
-
-
-class UpdateProfileForm(forms.ModelForm):
-    avatar = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control-file'}))
-    bio = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
-
-    class Meta:
-        model = Profile
-        fields = ['avatar', 'bio']
-
-
 class NewUserForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
@@ -91,3 +71,10 @@ class NewUserForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+# class RecommendedModelForm(ModelForm):
+#     class Meta:
+#         model = Recommended
+#         fields = '__all__'
+#     def clean_due_back(self):
+#        data = self.cleaned_data['__all__']
