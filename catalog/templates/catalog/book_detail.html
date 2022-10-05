@@ -1,35 +1,66 @@
 {% extends "base_generic.html" %}
-
+{% block title %}<title>{{ book.author }}</title>{% endblock %}
 {% block content %}
-  <h1>Title: {{ book.title }}</h1>
-  
-  {% if user.is_authenticated %}
-{% if perms.catalog.can_mark_returned %}
-  <a href="{% url 'book-update' book.pk %}"> Update </a>
-  <br>
-  <a href="{% url 'book-delete' book.pk %}"> Delete </a>
-  {% endif %}
-{% endif %}
+    <div class="container-md">
+        {% if user.is_authenticated %}
+            {% if perms.catalog.can_mark_returned %}
+                <div class="container d-flex justify-content-end">
+                    <div class="btn-group " role="group" aria-label="Basic mixed styles example">
+                        <a href="{% url 'book-update' book.pk %}">
+                            <button type="button" class="btn btn-primary">Update</button>
+                        </a>
+                        <br>
+                        <a href="{% url 'book-delete' book.pk %}">
+                            <button type="button" class="btn btn-danger">Delete</button>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+        <figure class="text-center">
+            <blockquote class="blockquote">
+                <h1> {{ book.title }} </h1>
+            </blockquote>
+            <figcaption class="blockquote-footer" style="font-size:20px ">
+                <a href="{{ book.author.get_absolute_url }}" style="text-decoration:none;">{{ book.author }}</a>
+            </figcaption>
+        </figure>
 
-  <p><strong>Author:</strong> <a href="{{ book.author.get_absolute_url }}">{{ book.author }}</a></p> <!-- author detail link not yet defined -->
-  <p><strong>Summary:</strong> {{ book.summary }}</p>
-  <p><strong>ISBN:</strong> {{ book.isbn }}</p>
-  <p><strong>Language:</strong> {{ book.language }}</p>
-  <p><strong>Genre:</strong> {{ book.genre.all|join:", " }} </p>
+        <div class="container justify-content-center w-100">
+            <img src="{{ book.image.url }} " style="cursor: pointer; width: 40%" alt="book cover"/>
+        </div>
+        <br>
+        <div class="accordion" id="accordionSummary">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Summary
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                     data-bs-parent="#accordionSummary">
+                    <div class="accordion-body">
+                        {{ book.summary }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
 
-  <div style="margin-left:20px;margin-top:20px">
-    <h4>Copies</h4>
+        <div class="container">
+            <ul style="list-style: none;">
+                <li>
+                    <p><strong>Genre:</strong> {{ book.genre }} </p>
+                </li>
+                <li>
+                    <p><strong>Language:</strong> {{ book.language }}</p>
+                </li>
+                <li>
+                    <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+                </li>
+            </ul>
+        </div>
+    </div>
 
-    {% for copy in book.bookinstance_set.all %}
-      <hr>
-      <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
-        {{ copy.get_status_display }}
-      </p>
-      {% if copy.status != 'a' %}
-        <p><strong>Due to be returned:</strong> {{ copy.due_back }}</p>
-      {% endif %}
-      <p><strong>Imprint:</strong> {{ copy.imprint }}</p>
-      <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
-    {% endfor %}
-  </div>
 {% endblock %}

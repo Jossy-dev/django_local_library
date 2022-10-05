@@ -1,15 +1,22 @@
 {% extends "base_generic.html" %}
-
-{% block title %}Profile Page{% endblock title %}
+{% block title %}<title>{{ user.get_username }}</title>{% endblock %}
 {% block content %}
-    <div class="row my-3 p-3">
-        <img class="rounded-circle account-img" src="{{ user.profile.avatar.url }} " style="cursor: pointer;"/>
+    <div class="container">
+        <div class="row my-3 p-3">
+            <div class="col-11 d-flex justify-content-center">
+                <img class="rounded-circle account-img" src="{{ user.profile.avatar.url }} "
+                     style="padding: 3px; border: 2px solid #1e5553; border-radius: 50%; object-fit: cover;"
+                     alt="avatar"/>
+                {{ profile_form.avatar }}
+            </div>
+        </div>
     </div>
     {% if user_form.errors %}
         <div class="alert alert-danger alert-dismissible" role="alert">
             <div id="form_errors">
                 {% for key, value in user_form.errors.items %}
                     <strong>{{ value }}</strong>
+
                 {% endfor %}
             </div>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -17,30 +24,47 @@
             </button>
         </div>
     {% endif %}
-    <div class="form-content">
-        <form method="post" enctype="multipart/form-data">
+    <div class="container formContainer">
+        <form method="post" enctype="multipart/form-data" >
             {% csrf_token %}
-            <div class="form-row">
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <label class="small mb-1">Username:</label>
-                            {{ user_form.username }}
-                        <label class="small mb-1">Email:</label>
-                            {{ user_form.email }}
+            <div class="container mb-5">
+                <div class="row mb-5">
+                    <div class="col-12 col-md-11 mb-3">
+                        <label class="small">Username:</label>
+                        {{ user_form.username }}
                     </div>
-                    <div class="form-group">
-                        <a href="#">Change Password</a>
-                        <hr>
-                        <label class="small mb-1">Change Avatar:</label>
-                        {{ profile_form.avatar }}
+                    <div class="col-12 col-md-11 mb-3">
+                        <label class="small">Bio:</label>
+                        {{ profile_form.bio }}
                     </div>
-                    <label class="small mb-1">Bio:</label> {{ profile_form.bio }}
-                    <label class="small mb-1">Select Fav Genres:</label> {{ profile_form.favourite_genre }}
+                    <div class="col-12 col-md-5 me-5 mb-3">
+                        <label class="small">First Name:</label>
+                        {{ user_form.first_name }}
+                    </div>
+                    <div class="col-12 col-md-5 mb-3">
+                        <label class="small">Last Name:</label>
+                        {{ user_form.last_name }}
+                    </div>
+                    <div class="col-12 col-md-5 me-5 mb-3">
+                        <label class="small">E-mail:</label>
+                        {{ user_form.email }}
+                    </div>
+                    <div class="col-12 col-md-5 mb-3">
+                        <label class="small">Nationality:</label>
+                        {{ profile_form.nationality }}
+                    </div>
+                    <div class="col-10 col-md-6 mb-3" >
+                        <label class="small">Fav Genre:</label>
+                        {{ profile_form.favourite_genre }}
+                    </div>
+                    <div class="col-12 mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                    </div>
                 </div>
             </div>
-            <br><br>
-            <button type="submit" class="btn btn-dark btn-lg">Save Changes</button>
-            <button type="reset" class="btn btn-dark btn-lg">Reset</button>
         </form>
+        <div class="container mb-5">
+            <a href="{% url 'password_reset' %}">Change Password</a>
+        </div>
     </div>
 {% endblock content %}

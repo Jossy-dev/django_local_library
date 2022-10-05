@@ -1,12 +1,12 @@
-from django.db import models
-from django.contrib.auth.models import User
+import uuid  # Required for unique book instances
 from datetime import date
-
+from PIL import Image
+from django.contrib.auth.models import User
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse  # Used to generate URLs by reversing the URL patterns
-import uuid  # Required for unique book instances
-from PIL import Image
+from django_countries.fields import CountryField
 
 
 # Create your models here.
@@ -41,19 +41,28 @@ class Language(models.Model):
 class Book(models.Model):
     """Model representing a book (but not a specific copy of a book)."""
     title = models.CharField(max_length=200)
-
+    image = models.ImageField(default='book-default.jpg', upload_to='profile_images')
+    date_added = models.DateField(help_text='Enter day book was added: YYYY-MM-DD')
     # Foreign Key used because book can only have one author, but authors can have multiple books
     # Author as a string rather than object because it hasn't been declared yet in the file
     author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
-
     summary = models.TextField(max_length=1000, help_text='Enter a brief description of the book')
     isbn = models.CharField('ISBN', max_length=13, unique=True,
-                            help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>')
+                            help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn'
+                                      '">ISBN number</a>')
 
     # Genre class has already been defined so we can specify the object above.
     genre = models.ForeignKey('Genre', on_delete=models.SET_NULL, null=True)
 
     language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
+
+    def save(self, *args, **kwargs):
+        super().save()
+        img = Image.open(self.image.path)
+        if img.height > 100 or img.width > 100:
+            new_img = (100, 100)
+            img.thumbnail(new_img)
+            img.save(self.image.path)
 
     def __str__(self):
         """String for representing the Model object."""
@@ -68,8 +77,8 @@ class BookInstance(models.Model):
     """Model representing a specific copy of a book (i.e. that can be borrowed from the library)."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4,
                           help_text='Unique ID for this particular book across whole library')
-    book = models.ForeignKey('Book', on_delete=models.RESTRICT, null=True)
-    imprint = models.CharField(max_length=200)
+    book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)
+    imprint = models.CharField(max_length=200, null=True, blank=True)
     due_back = models.DateField(null=True, blank=True)
     borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -109,6 +118,7 @@ class Author(models.Model):
     last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField(null=True, blank=True)
     date_of_death = models.DateField('died', null=True, blank=True)
+    bio = models.TextField(max_length=1000, help_text="Enter the author's biography", null=True, blank=True)
 
     class Meta:
         ordering = ['last_name', 'first_name']
@@ -128,6 +138,7 @@ class Profile(models.Model):
     avatar = models.ImageField(default='default.png', upload_to='profile_images')
     bio = models.TextField()
     favourite_genre = models.ManyToManyField(Genre, help_text='Select your favourite genres')
+    nationality = CountryField(blank_label='(select country)')
 
     def __str__(self):
         return self.user.username
@@ -148,15 +159,6 @@ class Profile(models.Model):
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+        print("Profile created")
     else:
         print("User profile could not be created.")
-
-# class Recommended(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-#     favourite_genre = models.ManyToManyField(Genre, help_text='Select your favourite genres')
-#     def __str__(self):
-#         """String for representing the Model object."""
-#         return self.name
-#     def get_absolute_url(self):
-#         return reverse('author-detail', args=[str(self.id)])

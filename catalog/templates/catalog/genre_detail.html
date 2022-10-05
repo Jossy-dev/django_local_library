@@ -1,17 +1,55 @@
 {% extends "base_generic.html" %}
-
+{% block title %}<title>{{ genre.name }}</title>{% endblock %}
 {% block content %}
-<h1>Genre: {{ genre.name }} </h1>
-<br>
-<hr>
-{% for genre in genre.book_set.all %}
-{% if genre.title %}
-<a href="{{ genre.get_absolute_url }}"> <h5> {{ genre.title }} </h5> </a>
-<p><strong> Summary: </strong>{{ genre.summary }} </p>
-<hr>
-{% else %}
-<h5> This genre has no books </h5>
-{% endif %}
-{% endfor %}
+    <div class="container-md">
+        {% if user.is_authenticated %}
+            {% if perms.catalog.can_mark_returned %}
+                <div class="container d-flex justify-content-end">
+                    <div class="btn-group " role="group" aria-label="Basic mixed styles example">
+                        <a href="{% url 'genre-update' genre.pk %}">
+                            <button type="button" class="btn btn-primary">Update</button>
+                        </a>
+                        <br>
+                        <a href="{% url 'genre-delete' genre.pk %}">
+                            <button type="button" class="btn btn-danger">Delete</button>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+        <div class="container text-center">
+            <h2 style="text-decoration: underline;">{{ genre.name }} </h2>
+        </div>
+        <br>
+
+        {% if genre.book_set.all %}
+            <div class="container mb-3">
+                <div class="row row-cols-2 row-cols-md-4 g-5">
+                    {% for book in genre.book_set.all %}
+                        <div class="col">
+                            <div class="card h-100">
+                                <a class="" href="{{ book.get_absolute_url }}">
+                                    <img src="{{ book.image.url }}" class="card-img-top img-fluid" alt="book cover"
+                                         style="height: 15vw;  object-fit: cover;">
+                                </a>
+                                <div class="card-body">
+                                    <blockquote class="blockquote mb-0">
+                                        <a href="{{ book.get_absolute_url }}" style="text-decoration: none"><h5
+                                                class="card-title">{{ book.title }}</h5></a>
+                                        <a href="{{ book.author.get_absolute_url }}" style="text-decoration: none">
+                                            <footer class="blockquote-footer">{{ book.author }}</footer>
+                                        </a>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <h5> No books under this genre </h5>
+        {% endif %}
+
+    </div>
 
 {% endblock %}

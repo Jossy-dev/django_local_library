@@ -1,14 +1,29 @@
 {% extends "base_generic.html" %}
-
+{% load crispy_forms_filters %}
+{% block title %}<title>Book form</title>{% endblock %}
 {% block content %}
-<a href="{% url 'genre-create' %}"> Add Genre </a>
-<br>
-<a href="{% url 'language-create' %}"> Add Language </a>
-  <form action="" method="post">
-    {% csrf_token %}
-    <table>
-    {{ form.as_table }}
-    </table>
-    <input type="submit" value="Submit">
-  </form>
+    <div class="container d-flex justify-content-end">
+
+        <a href="{% url 'genre-create' %}">
+            <button class="btn btn-outline-secondary"> Add Genre</button>
+        </a>
+        <br>
+        <a href="{% url 'language-create' %}">
+            <button class="btn btn-outline-secondary ms-3"> Add Language</button>
+        </a>
+    </div>
+    <form action="" method="post" enctype="multipart/form-data">
+
+        <div class="container py-3 d-flex justify-content-center">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-primary mt-2">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </form>
 {% endblock %}

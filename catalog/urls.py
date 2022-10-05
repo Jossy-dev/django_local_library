@@ -1,5 +1,6 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -29,7 +30,9 @@ urlpatterns += [
     path('book/<int:pk>/update/', views.BookUpdate.as_view(), name='book-update'),
     path('book/<int:pk>/delete/', views.BookDelete.as_view(), name='book-delete'),
     path('book/create/addlanguage/', views.LanguageCreate.as_view(), name='language-create'),
-    path('book/create/addgenre/', views.GenreCreate.as_view(), name='genre-create'),
+    path('genre/create/addgenre/', views.GenreCreate.as_view(), name='genre-create'),
+    path('genre/<int:pk>/update/', views.GenreUpdate.as_view(), name='genre-update'),
+    path('genre/<int:pk>/delete/', views.GenreDelete.as_view(), name='genre-delete'),
 ]
 
 urlpatterns += [
@@ -40,4 +43,9 @@ urlpatterns += [
     path('profile/', views.profile, name='users-profile'),
     path('register/', views.register_request, name="register"),
     path('recommended/', views.RecommendedListView.as_view(), name='recommended'),
+    path('profiledetail/', views.profile_detail, name='profile-detail'),
+    path('borrow/', views.borrow_book_action, name='borrow'),
+    path("select2/", include("django_select2.urls")),
 ]
+
+urlpatterns += staticfiles_urlpatterns()

@@ -1,11 +1,16 @@
 {% extends "base_generic.html" %}
-
+{% load crispy_forms_filters %}
+{% block title %}<title>Genre form</title>{% endblock %}
 {% block content %}
-  <form action="" method="post">
-    {% csrf_token %}
-    <table>
-    {{ form.as_table }}
-    </table>
-    <input type="submit" value="Submit">
-  </form>
+    <div class="container py-5 d-flex justify-content-center">
+        <div class="row">
+            <div class="col-12">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary mt-2">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}

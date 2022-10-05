@@ -1,0 +1,24 @@
+*body{
+    background-color: blue !important;
+}
+.blue{
+    color: brown !important;
+}
+
+.sidebar-nav {
+    margin-top: 20px;
+    padding: 0;
+    list-style: none;
+}
+
+a:hover{
+  color: red !important;
+  text-decoration: none;
+  outline: none;
+}
+
+.active{
+  font-size: 30px;
+  color: red;
+  border-bottom: 5px solid red;
+}

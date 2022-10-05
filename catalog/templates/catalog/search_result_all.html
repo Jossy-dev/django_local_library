@@ -1,20 +1,60 @@
 {% extends "base_generic.html" %}
-
+{% block title %}<title>{{ request.GET.q }}</title>{% endblock %}
 {% block content %}
-
-    <h1>Search Results for <b>"{{ request.GET.q }}"</b></h1>
+    <div class="container py-5 ">
+        <div class="container d-flex justify-content-center mb-3">
+            <h2>Search Results for <span class="fst-italic" style="color:grey">"{{ request.GET.q }}"</span></h2>
+        </div>
         {% if found_entries %}
-
             <ul>
                 {% for result in found_entries %}
-                    <li><a href="{{ result.get_absolute_url }}">{{ result }}</a></li>
+                    <li class="mb-2"><a href="{{ result.get_absolute_url }}">{{ result }}</a></li>
                 {% endfor %}
             </ul>
-
         {% else %}
-        <p> No result found for:  <b>"{{ request.GET.q }}"</b></p>
+            <p><b>No result found</b></p>
         {% endif %}
+    </div>
+{% endblock %}
 
+{% block pagination %}
+    <br>
+    {% if found_entries.has_other_pages %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if  found_entries.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="{{ request.get_full_path }}&page={{ found_entries.previous_page_number }}">previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">previous</a>
+                    </li>
+                {% endif %}
+
+                {% for i in found_entries.paginator.page_range %}
+                    {% if found_entries.number == i %}
+                        <li class="page-item active"><a class="page-link" href="#"><span>{{ i }}</span></a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link"
+                                                 href="{{ request.get_full_path }}&page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if found_entries.has_next %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="{{ request.get_full_path }}&page={{ found_entries.next_page_number }}">next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
 {% endblock %}
 
 

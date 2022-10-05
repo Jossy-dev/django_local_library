@@ -1,5 +1,220 @@
+body {
+    background-color: whitesmoke !important;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 .sidebar-nav {
-    margin-top: 20px;
+    margin-top: 10px;
     padding: 0;
     list-style: none;
 }
+
+.sidebar-nav li {
+    margin-bottom: 5px;
+}
+
+.sidebar-nav li > a {
+    text-decoration: none;
+    padding: 5px;
+}
+
+.sidebar-nav li > a:hover {
+    color: #1e5553;
+    border-bottom: 2px solid #1e5553;
+}
+
+.sidebar-nav li > a:hover:last-child {
+    border-bottom: none;
+}
+
+.sidebar-nav li:last-child {
+    margin-top: 4rem;
+}
+
+#sticky-sidebar {
+    position: fixed;
+    max-width: 17%;
+}
+
+#sticky-sidebar li.active > a {
+    color: #1e5553 !important;
+    border-bottom: 2px solid #1e5553 !important;
+}
+
+.fixed-top {
+    z-index: 3;
+}
+
+header {
+    position: relative;
+    z-index: 1;
+    top: 0;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 99%;
+}
+
+#navbarScroll li > a {
+    color: #1e5553 !important;
+}
+
+#navbarScroll li.active > a {
+    color: #531e55 !important;
+    border-bottom: 2px solid #531e55 !important;
+}
+
+.navbar-nav li > a:hover {
+    color: #531e55 !important;
+    border-bottom: 2px solid #531e55 !important;
+}
+
+.bookList {
+    text-decoration: none !important;
+    color: red !important;
+}
+
+footer {
+    margin-top: auto;
+}
+
+form button.searchbtn:hover {
+    color: #531e55;
+}
+
+
+.modal.right.fade.in .modal-dialog {
+    left: 0 !important;
+    transform: translateY(-50%);
+}
+
+.modal.right .modal-content {
+    height: 100%;
+    overflow: auto;
+    border-radius: 0;
+}
+
+.modal.right .modal-dialog {
+    position: fixed;
+    margin: auto;
+    height: 100%;
+    width: 60%;
+    -webkit-transform: translate3d(0%, 0, 0);
+    -ms-transform: translate3d(0%, 0, 0);
+    -o-transform: translate3d(0%, 0, 0);
+    transform: translate3d(0%, 0, 0);
+}
+
+.modal.right.fade.in .modal-dialog {
+    transform: translateY(0%);
+}
+
+.modal.right.fade .modal-dialog {
+    left: 0;
+    -webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
+    -moz-transition: opacity 0.3s linear, left 0.3s ease-out;
+    -o-transition: opacity 0.3s linear, left 0.3s ease-out;
+    transition: opacity 0.3s linear, left 0.3s ease-out;
+}
+
+#modalBtn {
+    width: 10vh;
+}
+
+#modalBtn:hover {
+    width: 11vh;
+}
+
+#modalBtn img {
+    border: 2px solid #1e5553;
+    border-radius: 50%;
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+}
+
+#modalBtn img:hover {
+    border: 3px solid #531e55;
+}
+
+.modal-nav {
+    margin-top: 2rem;
+    height: 60%;
+    padding: 0;
+    list-style: none;
+}
+
+.modal-nav li {
+    margin-bottom: 7px;
+}
+
+.modal-nav li > a {
+    text-decoration: none;
+    padding: 5px;
+}
+
+.modal-nav li > a:hover {
+    color: #1e5553;
+    border-bottom: 2px solid #1e5553;
+}
+
+.modal-nav li > a:hover:last-child {
+    border-bottom: none;
+}
+
+.modal-nav li:last-child {
+    margin-top: 5rem;
+}
+
+/*//////////////-----Profile detail page-------//////////*/
+p.name {
+    font-size: small;
+    color: darkslategrey;
+    margin: 0;
+    padding: 0;
+}
+
+p.detail {
+    padding: 0 !important;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1e5553;
+}
+
+.detail li {
+    margin: 0;
+    padding: 0;
+}
+
+.detail .list {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1e5553;
+}
+
+.bg {
+    height: 85vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.7;
+    z-index: 1;
+}
+
+.login{
+    background-color: white;
+}
+
+#id_favourite_genre{
+    width: 100%;
+}
+
+.asteriskField{
+    color:red;
+}
+

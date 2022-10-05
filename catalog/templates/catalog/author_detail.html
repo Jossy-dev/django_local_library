@@ -1,42 +1,67 @@
 {% extends "base_generic.html" %}
-
+{% block title %}<title>{{ author.first_name }} {{ author.last_name }}</title>{% endblock %}
 {% block content %}
- <h2> NAME: {{author.first_name}} {{author.last_name}}</h2>
+    <div class="container-md">
+        {% if user.is_authenticated %}
+            {% if perms.catalog.can_mark_returned %}
+                <div class="container d-flex justify-content-end">
+                    <div class="btn-group " role="group" aria-label="Basic mixed styles example">
+                        <a href="{% url 'author-update' author.pk %}">
+                            <button type="button" class="btn btn-primary">Update</button>
+                        </a>
+                        <br>
+                        <a href="{% url 'author-delete' author.pk %}">
+                            <button type="button" class="btn btn-danger">Delete</button>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+        <figure class="text-center mt-3">
+            <blockquote class="blockquote">
+                <h2 style="font-family: Helvetica, sans-serif;"> {{ author.first_name }} {{ author.last_name }} </h2>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+                {{ author.date_of_birth }} <strong>-</strong> {%  if author.date_of_death %} {{ author.date_of_death }}
+                {% else %} {% endif %}
+            </figcaption>
+        </figure>
 
-<h3> Author's Details </h3>
+        <div class="container bg-light">
+            <div class="row">
+                <div class="col-12">
+                    <h5> Bio: </h5>
+                    <p> {{ author.bio }} </p>
+                </div>
+            </div>
+        </div>
+        <br>
+        <hr>
 
- {% if user.is_authenticated %}
- {% if perms.catalog.can_mark_returned %}
-<a href=" {% url 'author-update' author.pk %}">Update</a>
-<a href=" {% url 'author-delete' author.pk %}">Delete</a>
-{% endif %}
-{% endif %}
-
-{% if  author.date_of_birth %}
-<p><strong>Birth Date:</strong> <a href="">{{ author.date_of_birth }}</a></p>
-{% else %}
-<p><strong>Birth Date:</strong>  Not Known</p>
-{% endif %}
-
-{% if author.date_of_death %}
-<p><strong>Death Date:</strong> {{ author.date_of_death }}</p>
-{% else %}
-<p><strong>Death Date:</strong> </p>
-{% endif %}
-
-<hr>
-<div style="margin-left:20px;margin-top:20px">
-<h3> Books by  {{author.first_name}} {{author.last_name}} </h3>
-
-{% for books in author.book_set.all %}
-{% if books.title %}
-<a href="{{ books.get_absolute_url }}"> <h5> {{ books.title }} </h5> </a>
-<p><strong> Summary: </strong>{{ books.summary }} </p>
-{% else %}
-<h5> This author has no books </h5>
-{% endif %}
-{% endfor %}
-
-</div>
-
+        {% if author.book_set.all %}
+            <h5 class="text-center m-3">Books by {{ author.first_name }}</h5>
+            <div class="container mb-3">
+                <div class="row row-cols-2 row-cols-md-4 g-5">
+                    {% for book in author.book_set.all %}
+                        <div class="col">
+                            <div class="card h-100">
+                                <a class="" href="{{ book.get_absolute_url }}">
+                                    <img src="{{ book.image.url }}" class="card-img-top img-fluid" alt="book cover"
+                                         style="height: 15vw;  object-fit: cover;">
+                                </a>
+                                <div class="card-body">
+                                    <blockquote class="blockquote mb-0">
+                                        <a href="{{ book.get_absolute_url }}" style="text-decoration: none"><h5
+                                                class="card-title">{{ book.title }}</h5></a>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <h5> No book by this author in library </h5>
+        {% endif %}
+    </div>
 {% endblock %}

@@ -21,6 +21,7 @@ from django.views.generic import RedirectView
 # Use static() to add URL mapping to serve static files during development (only)
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf import settings
 
 from django.contrib.auth import views as auth_views
 
@@ -47,6 +48,8 @@ urlpatterns += [
 ]
 urlpatterns += [
     path('books/', views.LibrarianBorrowedBooksListView.as_view(), name='librarian-list'),
+    path('return/', views.return_book, name='return'),
+    path('borrow/', views.borrow_book_action, name='borrow'),
 ]
 
 urlpatterns += [

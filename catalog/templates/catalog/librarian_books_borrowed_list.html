@@ -1,21 +1,106 @@
 {% extends "base_generic.html" %}
-
+{% block title %}<title>All Borrowed Books</title>{% endblock %}
 {% block content %}
-<h3>Library's Borrowed books</h3>
+      <div class="container d-flex justify-content-center mb-3">
+            <h3>Library's Borrowed books</h3>
+        </div>
 
-{% if librarian_list %}
-    <ul>
-
-      {% for bookinst in librarian_list %}
-      <li class="{% if bookinst.is_overdue %}text-danger{% endif %}">
-        <a href="{% url 'book-detail' bookinst.book.pk %}">{{bookinst.book.title}} </a> ({{ bookinst.due_back }})
-      <a href="{% url 'renew-book-librarian' bookinst.id %}">Renew</a>
-      </li>
-      {% endfor %}
-    </ul>
-
+    {% if librarian_list %}
+        <div class="row">
+            {% for bookinst in librarian_list %}
+                <div class="col-6 col-md-4 mb-4" id="book-{{ bookinst.id }}">
+                    <div class="card h-100 returned">
+                        <div class="card-body">
+                            <a href="{% url 'book-detail' bookinst.book.pk %}"><h5
+                                    class="card-title">{{ bookinst.book.title }}</h5></a>
+                            <p class="card-text">ISBN — {{ bookinst.book.isbn }}</p>
+                            <p class="mt-auto{% if bookinst.is_overdue %}text-danger {% else %} text-success {% endif %}">
+                                <b>{{ bookinst.due_back }}</b></p>
+                            <div class="container">
+                                <div class="row ">
+                                    <div class="col-6">
+                                        <a href="{% url 'renew-book-librarian' bookinst.id %}">
+                                            <button class="btn mt-auto btn-warning mt-auto">Renew</button>
+                                        </a>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-success return mt-auto" data-id="{{ bookinst.id }}"
+                                                data-bookid="#book-{{ bookinst.id }}"> Returned
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     {% else %}
-      <p>There are no books borrowed.</p>
+        <p>There are no books borrowed.</p>
     {% endif %}
 
+{% endblock %}
+
+{% block pagination %}
+    <br>
+    {% if is_paginated %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">previous</a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+                <li class="page-item"><a class="page-link" href="#">of</a></li>
+                <li class="page-item"><a class="page-link" href="#">{{ page_obj.paginator.num_pages }}</a></li>
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}
+
+{% block script %}
+    <script>
+        $('.return').on('click', function () {
+            let instance_id = $(this).data('id');
+            let book_id = $(this).data('bookid');
+            let _this = $(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'return' %}",
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    id: instance_id
+                },
+                success: function (data) {
+                    if (data['completed']) {
+                        $(book_id).hide();
+                    } else {
+                        alert("This book is not on loan");
+                    }
+
+                },
+                error: function (data) {
+                    alert('Unsuccessful');
+                },
+            })
+
+        });
+    </script>
 {% endblock %}

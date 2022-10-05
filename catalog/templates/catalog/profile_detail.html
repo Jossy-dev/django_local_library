@@ -1,5 +1,52 @@
-{% extends "base_generic.html" %}
-
+{% extends 'base_generic.html' %}
+{% block title %}<title>{{ user.get_username }}</title>{% endblock %}
 {% block content %}
-<p> profile.user </p>
+    <div class="container-md mt-4">
+        <div class="row mb-5">
+            <div class="col-10 d-flex justify-content-center">
+                <img src="{{ user.profile.avatar.url }}" class="rounded-circle account-img img-fluid" alt="avatar"
+                     style="padding: 3px; border: 2px solid #1e5553; border-radius: 50%; object-fit: cover;"/>
+            </div>
+            <div class="col-1 d-flex justify-content-end" style="height: 40px">
+                <a href="{% url 'users-profile' %}">
+                    <button class="btn btn-outline-secondary">Update</button>
+                </a>
+            </div>
+            <div class="col-12 col-md-11 mt-3 ms-3" style="background-color: white">
+                <p class="name"> Username: </p>
+                <p class="detail"><span style="font-weight: normal">@</span>{{ user.get_username }}</p>
+            </div>
+            <div class="col-12 col-md-11 mt-3 ms-3" style="background-color: white">
+                <p class="text-break name"> Bio: </p>
+                <p class="detail">{{ user.profile.bio }} </p>
+            </div>
+            <div class="col-12 col-md-5 ms-3 mt-3 me-5 " style="background-color: white">
+                <p class="name"> First Name: </p>
+                <p class="detail">{{ user.first_name }} </p>
+            </div>
+            <div class="col-12 col-md-5 mt-3 ms-3" style="background-color: white">
+                <p class="name"> Last Name: </p>
+                <p class="detail">{{ user.last_name }} </p>
+            </div>
+            <div class="col-12 col-md-5 ms-3 mt-3 me-5 " style="background-color: white">
+                <p class="name"> E-mail: </p>
+                <p class="detail">{{ user.email }} </p>
+            </div>
+            <div class="col-12 col-md-5 mt-3 ms-3" style="background-color: white">
+                <p class="name"> Nationality: </p>
+                <p class="detail"> {{ user.profile.nationality }} </p>
+            </div>
+            <div class="col-12 col-md-5 ms-3 mt-3 me-5 " style="background-color: white">
+                <p class="name"> Fav Genre: </p>
+
+                <ul class="detail">
+                    {% for genre in user.profile.favourite_genre.all %}
+                        <li class="list">
+                            {{ genre }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endblock %}

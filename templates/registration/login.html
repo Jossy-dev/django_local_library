@@ -1,37 +1,26 @@
 {% extends "base_generic.html" %}
+{% load crispy_forms_filters %}
+{% load static %}
+
 
 {% block content %}
+    <div class="bg-image bg p-5 text-center shadow-1-strong mb-3 text-black"
+         style="background-image: url('{% static 'media/loginBackground.jpg' %}');"
+    >
+        <div class="container d-flex justify-content-center ">
+            <div class="row shadow-lg p-3 mb-5 bg-body rounded mw-50" style=" background-color: white;">
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <div class="col-12 login mb-4">
+                        {{ form|crispy }}
+                        <p><a href="{% url 'password_reset' %}">Forgot password?</a></p>
+                        <button type="submit" class="btn btn-primary mt-2">Sign in</button>
+                    </div>
+                </form>
+                 <p>Dont have an account?<a href="{% url 'register' %}"> Register</a></p>
+            </div>
 
-  {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
-  {% endif %}
-
-  {% if next %}
-    {% if user.is_authenticated %}
-      <p>Your account doesn't have access to this page. To proceed,
-      please login with an account that has access.</p>
-    {% else %}
-      <p>Please login to see this page.</p>
-    {% endif %}
-  {% endif %}
-
-  <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    <table>
-      <tr>
-        <td>{{ form.username.label_tag }}</td>
-        <td>{{ form.username }}</td>
-      </tr>
-      <tr>
-        <td>{{ form.password.label_tag }}</td>
-        <td>{{ form.password }}</td>
-      </tr>
-    </table>
-    <input type="submit" value="login">
-    <input type="hidden" name="next" value="{{ next }}">
-  </form>
-
-  {# Assumes you setup the password_reset view in your URLconf #}
-  <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+        </div>
+    </div>
 
 {% endblock %}

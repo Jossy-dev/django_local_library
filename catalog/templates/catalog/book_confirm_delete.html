@@ -1,14 +1,20 @@
 {% extends "base_generic.html" %}
-
+{% load crispy_forms_filters %}
+{% block title %}<title>Delete book</title>{% endblock %}
 {% block content %}
-
-<h1>Delete Book</h1>
-
-<p>Are you sure you want to delete the book: {{ author }}?</p>
-
-<form action="" method="POST">
-  {% csrf_token %}
-  <input type="submit" value="Yes, delete.">
-</form>
+    <div class="container py-5 d-flex justify-content-center">
+        <div class="row">
+            <div class="col-12">
+                <p class="mb-3">Are you sure you want to delete the book:<b> {{ book.title }}</b>?</p>
+            </div>
+            <div class="col-12">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-danger mt-2">Yes,  Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

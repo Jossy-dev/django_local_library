@@ -1,11 +1,16 @@
-from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import User
-from .models import Profile
-from django import forms
 import datetime
+
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import ModelForm
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.forms import CheckboxSelectMultiple
+from django.utils.translation import gettext_lazy as _
+from django.views.generic import CreateView
+
+from . import models
+from .models import Profile, BookInstance, Genre, Book
+from django_select2 import forms as s2forms
 
 
 class UpdateUserForm(forms.ModelForm):
@@ -14,19 +19,38 @@ class UpdateUserForm(forms.ModelForm):
                                widget=forms.TextInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(required=True,
                              widget=forms.TextInput(attrs={'class': 'form-control'}))
+    first_name = forms.CharField(max_length=100,
+                                 required=True,
+                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
+    last_name = forms.CharField(max_length=100,
+                                required=True,
+                                widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['username', 'email', 'first_name', 'last_name']
+
+
+# class GenreWidget(s2forms.ModelSelect2Widget):
+#     search_fields = [
+#         "name__icontains",
+#     ]
 
 
 class UpdateProfileForm(forms.ModelForm):
     avatar = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control-file'}))
     bio = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
+    nationality = forms.CharField(max_length=100, help_text='Enter your nationality',
+                                  widget=forms.TextInput(attrs={'class': 'form-control'})),
+
+    # favourite_genre = forms.ModelChoiceField(queryset=Genre.objects.all())
 
     class Meta:
         model = Profile
-        fields = ['avatar', 'bio', 'favourite_genre']
+        fields = ['avatar', 'bio', 'favourite_genre', 'nationality']
+        # widgets = {
+        #     "favourite_genre": GenreWidget,
+        # }
 
 
 class RenewBookForm(forms.Form):
@@ -47,17 +71,6 @@ class RenewBookForm(forms.Form):
         return data
 
 
-# class SearchForm(forms.Form):
-#     search_value = forms.CharField(max_length = 100,label = '', label_suffix = '', help_text = 'Search...')
-
-#     def clean_search_value(self):
-#         data = self.cleaned_data['q']
-
-#         if not data:
-#             raise ValidationError(_('Field cannot be empty'))
-#         return data
-
-
 class NewUserForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
@@ -72,9 +85,17 @@ class NewUserForm(UserCreationForm):
             user.save()
         return user
 
-# class RecommendedModelForm(ModelForm):
-#     class Meta:
-#         model = Recommended
-#         fields = '__all__'
-#     def clean_due_back(self):
-#        data = self.cleaned_data['__all__']
+
+class BookInstanceForm(forms.ModelForm):
+    class Meta:
+        model = BookInstance
+        fields = ['id', 'book', 'due_back', 'borrower', 'status']
+
+
+class BookCreateForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'image', 'author', 'summary', 'date_added', 'isbn', 'genre', 'language']
+        widgets = {
+            'date_added': forms.DateInput()
+        }

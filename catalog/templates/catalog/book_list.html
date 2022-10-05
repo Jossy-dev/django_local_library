@@ -1,41 +1,124 @@
 {% extends "base_generic.html" %}
-
+{% block title %}<title>Book List</title>{% endblock %}
 {% block content %}
-  <h1>Book List</h1>
 
- {% if user.is_authenticated %}
-{% if perms.catalog.can_mark_returned %}
-  <a href="{% url 'book-create' %}"> Add Book </a>
-{% endif %}
-{% endif %}
-
-  {% if book_list %}
-  <ul>
-    {% for book in book_list %}
-      <li>
-        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> -{{book.author}}
-      </li>
-    {% endfor %}
-  </ul>
-  {% else %}
-    <p>There are no books in the library.</p>
-  {% endif %}
-{% endblock %}
-{% block pagination %}
-    {% if is_paginated %}
-        <div class="pagination">
-            <span class="page-links">
-                {% if page_obj.has_previous %}
-                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
-                {% endif %}
-                <span class="page-current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-                {% if page_obj.has_next %}
-                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
-                {% endif %}
-            </span>
-        </div>
-
+    {% if user.is_authenticated %}
+        {% if perms.catalog.can_mark_returned %}
+            <div class="container mt-6 mb-2">
+                <a href="{% url 'book-create' %}" style="text-decoration: none;">
+                    <button type="button" class="btn btn-outline-secondary">Add-book</button>
+                </a>
+            </div>
+        {% endif %}
     {% endif %}
-  {% endblock %}
+
+    <div class="container text-center" style="background-color: #1e5553; color: white">
+        <h2>All Books</h2>
+    </div>
+    <br>
+    {% if book_list %}
+        <div class="container">
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-5">
+                {% for book in book_list %}
+                    <div class="col">
+                        <div class="card h-100">
+                            <a class="" href="{{ book.get_absolute_url }}">
+                                <img src="{{ book.image.url }}" class="card-img-top img-fluid" alt="book cover"
+                                     style="height: 15vw;  object-fit: cover;">
+                            </a>
+                            <div class="card-body d-flex flex-column">
+                                <blockquote class="blockquote mb-0">
+                                    <a href="{{ book.get_absolute_url }}" style="text-decoration: none"><h5
+                                            class="card-title">{{ book.title }}</h5></a>
+                                    <a href="{{ book.author.get_absolute_url }}" style="text-decoration: none">
+                                        <footer class="blockquote-footer">{{ book.author }}</footer>
+                                    </a>
+                                </blockquote>
+                            {% if user.is_authenticated %}
+                                <button type="button"
+                                        class="btn mt-auto {% if book.id in borrowed_books_id %} btn-warning {% else %} btn-primary borrow-book-btn {% endif %}"
+                                        data-id="{{ book.id }}"> {% if book.id in borrowed_books_id %} Borrowed {% else %} Borrow {% endif %}
+                                </button>
+                            {% else %}
+                            <a href="{% url 'login' %}?next={{ request.path }}"> <button type="button" class="btn btn-primary">Borrow</button> </a>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <h1>{{ book_id }}</h1>
+            </div>
+        </div>
+    {% else %}
+        <p>There are no books in the library.</p>
+    {% endif %}
+{% endblock %}
+
+{% block pagination %}
+    <br>
+    {% if is_paginated %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">previous</a>
+                    </li>
+                {% endif %}
+
+                <li class="page-item"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+                <li class="page-item"><a class="page-link" href="#">of</a></li>
+                <li class="page-item"><a class="page-link" href="#">{{ page_obj.paginator.num_pages }}</a></li>
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}
+
+
+{% block script %}
+    <script>
+        $('.borrow-book-btn').on('click', function () {
+            let book_id = $(this).data('id');
+            let _this = $(this);
+
+            //Ajax
+            {#let postData = {csrfmiddlewaretoken: '{{ csrf_token }}'}#}
+            $.ajax({
+                type: "POST",
+                url: "{% url 'borrow' %}",
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    id: book_id
+                },
+                success: function (data) {
+                    if (data['completed']) {
+                        _this.removeClass("btn-primary");
+                        _this.addClass("btn-warning");
+                        _this.html("Borrowed")
+                    } else {
+                        alert("You have already borrowed this book");
+                    }
+
+                },
+                error: function (data) {
+                    alert('Unsuccessful');
+                },
+            })
+
+        })
+    </script>
+{% endblock %}
