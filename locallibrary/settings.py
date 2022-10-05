@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
     'crispy_forms',
     'django_countries',
+    'cloudinary_storage',
+    'cloudinary',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -156,3 +158,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'hblqdwtiz',
+    'API_KEY': '549743299788832',
+    'API_SECRET': 'vp1D3E3YlEDs4DcbOKK4psAk048',
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
