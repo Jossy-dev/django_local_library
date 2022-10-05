@@ -122,15 +122,15 @@ form button.searchbtn:hover {
 }
 
 #modalBtn {
-    width: 10vh;
+    width: 8vh;
 }
 
 #modalBtn:hover {
-    width: 11vh;
+    width: 9vh;
 }
 
 #modalBtn img {
-    border: 2px solid #1e5553;
+    border: 1px solid #1e5553;
     border-radius: 50%;
     width: 100%;
     height: auto;
