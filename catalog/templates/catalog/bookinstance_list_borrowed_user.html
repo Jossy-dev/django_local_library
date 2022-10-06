@@ -13,7 +13,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ bookinst.book.title }}</h5>
                             <p class="card-text">— {{ bookinst.book.author }}</p>
-                            <button class="btn {% if bookinst.is_overdue %}btn-danger {% else %} btn-success {% endif %}">{{ bookinst.due_back }}</button>
+                            <button class="btn mt-auto {% if bookinst.is_overdue %}btn-danger {% else %} btn-success {% endif %}">{{ bookinst.due_back }}</button>
                         </div>
                     </div>
                 </div>

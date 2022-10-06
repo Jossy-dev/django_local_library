@@ -1,5 +1,6 @@
 import datetime
 
+from cloudinary.forms import CloudinaryFileField
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -43,14 +44,9 @@ class UpdateProfileForm(forms.ModelForm):
     nationality = forms.CharField(max_length=100, help_text='Enter your nationality',
                                   widget=forms.TextInput(attrs={'class': 'form-control'})),
 
-    # favourite_genre = forms.ModelChoiceField(queryset=Genre.objects.all())
-
     class Meta:
         model = Profile
         fields = ['avatar', 'bio', 'favourite_genre', 'nationality']
-        # widgets = {
-        #     "favourite_genre": GenreWidget,
-        # }
 
 
 class RenewBookForm(forms.Form):

@@ -1,6 +1,8 @@
 import uuid  # Required for unique book instances
 from datetime import date
-from PIL import Image
+
+import cloudinary
+from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
@@ -41,7 +43,7 @@ class Language(models.Model):
 class Book(models.Model):
     """Model representing a book (but not a specific copy of a book)."""
     title = models.CharField(max_length=200)
-    image = models.ImageField(default='book-default.jpg', upload_to='profile_images')
+    image = cloudinary.models.CloudinaryField('image')
     date_added = models.DateField(help_text='Enter day book was added: YYYY-MM-DD')
     # Foreign Key used because book can only have one author, but authors can have multiple books
     # Author as a string rather than object because it hasn't been declared yet in the file
@@ -56,13 +58,14 @@ class Book(models.Model):
 
     language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
 
-    def save(self, *args, **kwargs):
-        super().save()
-        img = Image.open(self.image.path)
-        if img.height > 100 or img.width > 100:
-            new_img = (100, 100)
-            img.thumbnail(new_img)
-            img.save(self.image.path)
+    # resizing images
+    # def save(self, *args, **kwargs):
+    #     super().save()
+    #     img = Image.open(self.image.name)
+    #     if img.height > 100 or img.width > 100:
+    #         new_img = (100, 100)
+    #         img.thumbnail(new_img)
+    #         img.save(self.image.path)
 
     def __str__(self):
         """String for representing the Model object."""
@@ -135,24 +138,14 @@ class Author(models.Model):
 # Extending User Model Using a One-To-One Link
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(default='default.png', upload_to='profile_images')
+    # avatar = models.ImageField(default='default.png', upload_to='profile_images')
+    avatar = cloudinary.models.CloudinaryField('image', default='default.png')
     bio = models.TextField()
     favourite_genre = models.ManyToManyField(Genre, help_text='Select your favourite genres')
     nationality = CountryField(blank_label='(select country)')
 
     def __str__(self):
         return self.user.username
-
-    # resizing images
-    def save(self, *args, **kwargs):
-        super().save()
-
-        img = Image.open(self.avatar.path)
-
-        if img.height > 100 or img.width > 100:
-            new_img = (100, 100)
-            img.thumbnail(new_img)
-            img.save(self.avatar.path)
 
 
 @receiver(post_save, sender=User)
