@@ -6,40 +6,44 @@
         <h2>Recommended Books</h2>
     </div>
 
-    {% for genre in recommended.favourite_genre.all %}
-        {% if genre %}
-            <div class="container">
-                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-5">
-                    {% for book in genre.book_set.all %}
-                        <div class="col-6 col-md-4 col-lg-3 mb-5">
-                            <div class="card h-100">
-                                <a class="" href="{{ book.get_absolute_url }}">
-                                    {% if book.image %}
-                                        <img src="{{ book.image.url }}" class="card-img-top img-fluid bookcover"
-                                             alt="book cover">
-                                    {% else %}
-                                        <img src="{% static 'media/book-default.jpg' %}"
-                                             class="card-img-top img-fluid bookcover" alt="book cover">
-                                    {% endif %}
-                                </a>
-                                <div class="card-body">
-                                    <blockquote class="blockquote mb-0">
-                                        <a href="{{ book.get_absolute_url }}" style="text-decoration: none"><h5
-                                                class="card-title">{{ book.title }}</h5></a>
-                                        <a href="{{ book.author.get_absolute_url }}" style="text-decoration: none">
-                                            <footer class="blockquote-footer">{{ book.author }}</footer>
-                                        </a>
-                                    </blockquote>
+    {% if recommended.favourite_genre.all %}
+        {% for genre in recommended.favourite_genre.all %}
+            {% if genre %}
+                <div class="container">
+                    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-5">
+                        {% for book in genre.book_set.all %}
+                            <div class="col-6 col-md-4 col-lg-3 mb-5">
+                                <div class="card h-100">
+                                    <a class="" href="{{ book.get_absolute_url }}">
+                                        {% if book.image %}
+                                            <img src="{{ book.image.url }}" class="card-img-top img-fluid bookcover"
+                                                 alt="book cover">
+                                        {% else %}
+                                            <img src="{% static 'media/book-default.jpg' %}"
+                                                 class="card-img-top img-fluid bookcover" alt="book cover">
+                                        {% endif %}
+                                    </a>
+                                    <div class="card-body">
+                                        <blockquote class="blockquote mb-0">
+                                            <a href="{{ book.get_absolute_url }}" style="text-decoration: none"><h5
+                                                    class="card-title">{{ book.title }}</h5></a>
+                                            <a href="{{ book.author.get_absolute_url }}" style="text-decoration: none">
+                                                <footer class="blockquote-footer">{{ book.author }}</footer>
+                                            </a>
+                                        </blockquote>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-        {% else %}
-            <p>Select a favourite genre to see recommendations</p>
-        {% endif %}
+            {% else %}
+                <p>Select a favourite genre to see recommendations</p>
+            {% endif %}
 
-    {% endfor %}
+        {% endfor %}
+    {% else %}
+        <p><b>Select a favourite genre to see recommendations</b></p>
+    {% endif %}
 {% endblock %}
 
