@@ -11,7 +11,7 @@
                 <div class="col-6 col-md-4 mb-4" id="book-{{ bookinst.id }}">
                     <div class="card h-100 returned">
                         <div class="card-body">
-                            <a href="{% url 'book-detail' bookinst.book.pk %}"><h5
+                            <a href="{{ bookinst.book.get_absolute_url }}"><h5
                                     class="card-title">{{ bookinst.book.title }}</h5></a>
                             <p class="card-text">ISBN — {{ bookinst.book.isbn }}</p>
                             <p class="mt-auto{% if bookinst.is_overdue %}text-danger {% else %} text-success {% endif %}">
