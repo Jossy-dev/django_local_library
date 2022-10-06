@@ -20,14 +20,14 @@
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                 <img src="{% static "media/slidethree.jpg" %}" class="d-block w-100" alt="library">
+                <img src="{% static "media/slidethree.jpg" %}" class="d-block w-100" alt="library">
                 <div class="carousel-caption d-none d-md-block" style="margin-bottom: 10rem;">
                     <h2 style="background-color: #1e5553;">Welcome to Wike Library</h2>
                     <p></p>
                 </div>
             </div>
             <div class="carousel-item">
-                 <img src="{% static "media/slidetwo.jpg" %}" class="d-block w-100" alt="library">
+                <img src="{% static "media/slidetwo.jpg" %}" class="d-block w-100" alt="library">
                 <div class="carousel-caption mb-4 d-none d-md-block">
                     <h3 style="background-color: #1e5553;">Check out our huge catalog for books you love</h3>
                     <p></p>
@@ -57,27 +57,33 @@
     <div class="container">
         <h2>Latest:</h2>
         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-5 mb-3">
-        {% if latest %}
-            {% for book in latest %}
-                <div class="col">
-                    <div class="card h-100">
-                        <a class="" href="{{ book.get_absolute_url }}">
-                            <img src="{{ book.image.url }}" class="card-img-top img-fluid" alt="book cover"
-                                 style="height: 15vw;  object-fit: cover;">
-                        </a>
-                        <div class="card-body">
-                            <blockquote class="blockquote mb-0">
-                                <a href="{{ book.get_absolute_url }}" style="text-decoration: none"><h5
-                                        class="card-title">{{ book.title }}</h5></a>
-                                <a href="{{ book.author.get_absolute_url }}" style="text-decoration: none">
-                                    <footer class="blockquote-footer">{{ book.author }}</footer>
-                                </a>
-                            </blockquote>
+            {% if latest %}
+                {% for book in latest %}
+                    <div class="col">
+                        <div class="card h-100">
+                            <a class="" href="{{ book.get_absolute_url }}">
+                                {% if book.image %}
+                                    <img src="{{ book.image.url }}" class="card-img-top img-fluid bookcover"
+                                         alt="book cover">
+                                {% else %}
+                                    <img src="{% static 'media/book-default.jpg' %}"
+                                         class="card-img-top img-fluid bookcover"
+                                         alt="book cover">
+                                {% endif %}
+                            </a>
+                            <div class="card-body">
+                                <blockquote class="blockquote mb-0">
+                                    <a href="{{ book.get_absolute_url }}" style="text-decoration: none"><h5
+                                            class="card-title">{{ book.title }}</h5></a>
+                                    <a href="{{ book.author.get_absolute_url }}" style="text-decoration: none">
+                                        <footer class="blockquote-footer">{{ book.author }}</footer>
+                                    </a>
+                                </blockquote>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-        {% endif %}
+                {% endfor %}
+            {% endif %}
         </div>
         <div class="container d-flex justify-content-end m-2">
             <a href="{% url 'books' %}">
@@ -94,8 +100,13 @@
                 <div class="col">
                     <div class="card h-100">
                         <a class="" href="{{ book.get_absolute_url }}">
-                            <img src="{{ book.image.url }}" class="card-img-top img-fluid" alt="book cover"
-                                 style="height: 15vw;  object-fit: cover;">
+                            {% if book.image %}
+                                <img src="{{ book.image.url }}" class="card-img-top img-fluid bookcover"
+                                     alt="book cover">
+                            {% else %}
+                                <img src="{% static 'media/book-default.jpg' %}" class="card-img-top img-fluid bookcover"
+                                     alt="book cover">
+                            {% endif %}
                         </a>
                         <div class="card-body">
                             <blockquote class="blockquote mb-0">

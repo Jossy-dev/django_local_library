@@ -19,9 +19,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
     <!-- Jquery library -->
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"
-        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-   <!-- Select2 jquery and css library -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+            integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <!-- Select2 jquery and css library -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 </head>
 <body class="d-flex flex-column h-100">
 <div class="container-fluid" style="background-color: white; margin-bottom: 5rem;">
@@ -31,9 +31,15 @@
             {% if user.is_authenticated %}
                 <div class="container-fluid d-md-none mt-2" id="modalBtn">
                     <!-- partial:index.partial.html -->
-                    <img src="{{ user.profile.avatar.url }}" alt="avatar"
-                         data-bs-toggle="modal"
-                         data-bs-target="#myModal" class="img-fluid" >
+                    {% if user.profile.avatar %}
+                        <img src="{{ user.profile.avatar.url }}" alt="avatar"
+                             data-bs-toggle="modal"
+                             data-bs-target="#myModal" class="img-fluid">
+                    {% else %}
+                        <img src="{% static 'media/default.png' %}" alt="avatar"
+                             data-bs-toggle="modal"
+                             data-bs-target="#myModal" class="img-fluid">
+                    {% endif %}
                 </div>
             {% endif %}
 
@@ -151,8 +157,13 @@
                         <div class="row" style="border-bottom: 2px solid #1e5553">
                             <div class="col-1">
                                 <a class="" href="{% url 'profile-detail' %}">
-                                    <img src="{{ user.profile.avatar.url }}" alt="avatar"
-                                         style="border-radius:50%; border: 2px solid #1e5553; width: 70px;">
+                                    {% if user.profile.avatar %}
+                                        <img src="{{ user.profile.avatar.url }}" alt="avatar"
+                                             class="sidebarnav">
+                                    {% else %}
+                                        <img src="{% static 'media/default.png' %}" alt="avatar"
+                                             class="sidebarnav">
+                                    {% endif %}
                                 </a>
                             </div>
                             <div class="col-11">

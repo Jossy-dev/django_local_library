@@ -218,3 +218,24 @@ p.detail {
     color:red;
 }
 
+img.sidebarnav{
+    border-radius:50%;
+    border: 2px solid #1e5553;
+    width: 70px;
+}
+
+img.bookcover{
+    height: 15vw;
+    object-fit: cover;
+}
+
+img.bookdetail{
+    cursor: pointer;
+    width: 40%;
+}
+
+img.profileform{
+    padding: 3px;
+    border: 2px solid #1e5553;
+    border-radius: 50%;
+}

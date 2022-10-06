@@ -1,4 +1,5 @@
 {% extends "base_generic.html" %}
+{% load static %}
 {% block title %}<title>{{ author.first_name }} {{ author.last_name }}</title>{% endblock %}
 {% block content %}
     <div class="container-md">
@@ -7,7 +8,7 @@
                 <div class="container d-flex justify-content-end">
                     <div class="btn-group " role="group" aria-label="Basic mixed styles example">
                         <a href="{% url 'author-update' author.pk %}">
-                            <button type="button" class="btn btn-primary">Update</button>
+                            <button type="button" class="btn btn-primary me-2">Update</button>
                         </a>
                         <br>
                         <a href="{% url 'author-delete' author.pk %}">
@@ -22,8 +23,8 @@
                 <h2 style="font-family: Helvetica, sans-serif;"> {{ author.first_name }} {{ author.last_name }} </h2>
             </blockquote>
             <figcaption class="blockquote-footer">
-                {{ author.date_of_birth }} <strong>-</strong> {%  if author.date_of_death %} {{ author.date_of_death }}
-                {% else %} {% endif %}
+                {{ author.date_of_birth }} <strong>-</strong> {% if author.date_of_death %} {{ author.date_of_death }}
+            {% else %} {% endif %}
             </figcaption>
         </figure>
 
@@ -46,8 +47,13 @@
                         <div class="col">
                             <div class="card h-100">
                                 <a class="" href="{{ book.get_absolute_url }}">
-                                    <img src="{{ book.image.url }}" class="card-img-top img-fluid" alt="book cover"
-                                         style="height: 15vw;  object-fit: cover;">
+                                    {% if book.image %}
+                                        <img src="{{ book.image.url }}" class="card-img-top img-fluid bookcover"
+                                             alt="book cover">
+                                    {% else %}
+                                        <img src="{% static 'media/book-default.jpg' %}" class="card-img-top img-fluid bookcover"
+                                             alt="book cover">
+                                    {% endif %}
                                 </a>
                                 <div class="card-body">
                                     <blockquote class="blockquote mb-0">

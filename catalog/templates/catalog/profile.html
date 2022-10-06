@@ -1,4 +1,5 @@
 {% extends "base_generic.html" %}
+{% load static %}
 {% block title %}<title>{{ user.get_username }}</title>{% endblock %}
 {% block content %}
     {% if user_form.errors %}
@@ -20,9 +21,13 @@
             <div class="container">
                 <div class="row my-3 p-3">
                     <div class="col-8 col-md-5 d-flex justify-content-center">
-                        <img class="rounded-circle account-img w-50" src="{{ user.profile.avatar.url }} "
-                             style="padding: 3px; border: 2px solid #1e5553; border-radius: 50%;"
-                             alt="avatar"/>
+                        {% if user.profile.avatar %}
+                            <img class="rounded-circle account-img w-50 profileform" src="{{ user.profile.avatar.url }}"
+                                 alt="avatar"/>
+                        {% else %}
+                            <img src="{% static 'media/default.png' %}"
+                                 class="rounded-circle account-img w-50 profileform" alt="avatar">
+                        {% endif %}
                         {{ profile_form.avatar }}
                     </div>
                 </div>
