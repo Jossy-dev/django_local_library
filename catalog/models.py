@@ -43,7 +43,7 @@ class Language(models.Model):
 class Book(models.Model):
     """Model representing a book (but not a specific copy of a book)."""
     title = models.CharField(max_length=200)
-    image = cloudinary.models.CloudinaryField('image',  blank=True, null=True)
+    image = cloudinary.models.CloudinaryField('image', blank=True, null=True)
     date_added = models.DateField(help_text='Enter day book was added: YYYY-MM-DD')
     # Foreign Key used because book can only have one author, but authors can have multiple books
     # Author as a string rather than object because it hasn't been declared yet in the file
@@ -138,7 +138,7 @@ class Author(models.Model):
 # Extending User Model Using a One-To-One Link
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = cloudinary.models.CloudinaryField('image',  blank=True, null=True)
+    avatar = cloudinary.models.CloudinaryField('image', blank=True, null=True)
     bio = models.TextField()
     favourite_genre = models.ManyToManyField(Genre, help_text='Select your favourite genres')
     nationality = CountryField(blank_label='(select country)')
