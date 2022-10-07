@@ -82,8 +82,23 @@ footer {
     margin-top: auto;
 }
 
-form button.searchbtn:hover {
-    color: #531e55;
+.searchinput{
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+
+form > button.searchbar{
+    border: none;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+}
+
+form > button.searchbar > i {
+    color: #1e5553;
+}
+
+form > button.searchbar > i:hover {
+    color: #4ac1f7;
 }
 
 
@@ -238,4 +253,10 @@ img.profileform{
     padding: 3px;
     border: 2px solid #1e5553;
     border-radius: 50%;
+}
+
+img.profilemodal{
+    border-radius:50%;
+    border: 2px solid #1e5553;
+    width: 100px;
 }
