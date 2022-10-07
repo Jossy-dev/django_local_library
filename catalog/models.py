@@ -138,7 +138,7 @@ class Author(models.Model):
 # Extending User Model Using a One-To-One Link
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = cloudinary.models.CloudinaryField('image', blank=True, null=True)
+    avatar = cloudinary.models.CloudinaryField('avatar', null=True, default=None, blank=True)
     bio = models.TextField()
     favourite_genre = models.ManyToManyField(Genre, help_text='Select your favourite genres')
     nationality = CountryField(blank_label='(select country)')
