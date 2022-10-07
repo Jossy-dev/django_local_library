@@ -169,6 +169,10 @@ MEDIA_URL = '/media/'
 # }
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+"""
+Read more on Cloudinary config using the link below
+https://www.section.io/engineering-education/uploading-images-to-cloudinary-from-django-application/
+"""
 cloudinary.config(
     cloud_name="hblqdwtiz",
     api_key="549743299788832",
