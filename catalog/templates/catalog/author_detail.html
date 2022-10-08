@@ -23,8 +23,8 @@
                 <h2 style="font-family: Helvetica, sans-serif;"> {{ author.first_name }} {{ author.last_name }} </h2>
             </blockquote>
             <figcaption class="blockquote-footer">
-                {{ author.date_of_birth }} <strong>-</strong> {% if author.date_of_death %} {{ author.date_of_death }}
-            {% else %} {% endif %}
+                {{ author.date_of_birth }} <strong>-</strong> {% if author.date_of_death and author.date_of_birth %} {{ author.date_of_death }}
+            {% else %} To date{% endif %}
             </figcaption>
         </figure>
 
