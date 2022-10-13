@@ -164,11 +164,11 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-# CLOUDINARY_STORAGE = {
-#     'CLOUD_NAME': 'hblqdwtiz',
-#     'API_KEY': '549743299788832',
-#     'API_SECRET': 'vp1D3E3YlEDs4DcbOKK4psAk048',
-# }
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'hblqdwtiz',
+    'API_KEY': '176216731457557',
+    'API_SECRET': 'OFzhsN_uidMPo2UdKPCdQ3R2fzY',
+}
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 """
@@ -177,6 +177,6 @@ https://www.section.io/engineering-education/uploading-images-to-cloudinary-from
 """
 cloudinary.config(
     cloud_name="hblqdwtiz",
-    api_key="549743299788832",
-    api_secret="vp1D3E3YlEDs4DcbOKK4psAk048"
+    api_key="176216731457557",
+    api_secret="OFzhsN_uidMPo2UdKPCdQ3R2fzY"
 )
